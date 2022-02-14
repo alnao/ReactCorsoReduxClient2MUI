@@ -14,9 +14,10 @@ export const esercizi = [
   {id:'pushp', muscoli:'addominali'},
   {id:'corsa', muscoli:'gambe'},
 ];
+export const esercizioSelezionato={id:'Benvenuto',muscoli:'seleziona esercizio'}
 
 class App extends Component {
-	state={esercizi}
+	state={esercizi,esercizioSelezionato}
 	getEserciziPerGruppo = () => {
 		return Object.entries(
     this.state.esercizi.reduce((esercizi,esercizio) => {
@@ -25,6 +26,12 @@ class App extends Component {
 			return esercizi;
 		},{}));
 	}
+  onEsecizioSelect = id => {console.log(id);
+    if (id===undefined){return;}
+    this.setState( (prevState)=> ({
+      esercizioSelezionato: prevState.esercizi.find(ex => ex.id===id)
+    }));
+  }
   render(){return (
     <div className="App" >
       <Header></Header>
@@ -36,7 +43,9 @@ class App extends Component {
                   <Typography variant="h4">{muscoli}</Typography>
                   <List component="nav">
                     {esercizi.map(({id,muscoli}) => (
-                      <ListItem button><ListItemText>{id}</ListItemText></ListItem>
+                      <ListItem button key={id}>
+                        <ListItemText onClick={() => this.onEsecizioSelect(id)}>{id}</ListItemText>
+                      </ListItem>
                     ))}
                   </List>
                 </Fragment>
@@ -45,7 +54,9 @@ class App extends Component {
         </Grid>
         <Grid item xs={5} >
           <Paper elevation={1} style={style.Paper}>
-              Card dx</Paper>
+            <Typography variant="h5">{this.state.esercizioSelezionato.id}</Typography>
+            <Typography variant="subtitle1">{this.state.esercizioSelezionato.muscoli}</Typography>
+          </Paper>
         </Grid>
       </Grid>
 
